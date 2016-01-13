@@ -9,6 +9,7 @@ return [
     'import'            => [
         'application.models.*',
         'application.components.*',
+        'application.components.fBase.models.*',
     ],
     'modules'           => [],
     'components'        => [
