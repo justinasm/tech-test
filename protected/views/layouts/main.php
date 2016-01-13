@@ -7,7 +7,7 @@
     <meta name="language" content="en"/>
     <meta name="title" content=""/>
     <meta name="description" content=""/>
-    <title></title>
+    <title><?php echo $this->pageTitle; ?></title>
 </head>
 <body>
     <?php echo $content; ?>

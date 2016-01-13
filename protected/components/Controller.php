@@ -6,5 +6,5 @@
  */
 class Controller extends CController
 {
-
+    public $defaultAction = 'index';
 }

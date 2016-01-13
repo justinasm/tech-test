@@ -1,16 +1,17 @@
 <?php
 return [
-    'basePath'   => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-    'name'       => 'TECH-TEST',
-    'homeUrl'    => ['main/index'],
-    'preload'    => [],
-    'aliases'    => [],
-    'import'     => [
+    'basePath'          => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
+    'name'              => 'TECH-TEST',
+    'homeUrl'           => ['main/index'],
+    'defaultController' => 'main',
+    'preload'           => [],
+    'aliases'           => [],
+    'import'            => [
         'application.models.*',
         'application.components.*',
     ],
-    'modules'    => [],
-    'components' => [
+    'modules'           => [],
+    'components'        => [
         'cache'        => [
             'class' => 'CFileCache',
         ],
@@ -24,9 +25,9 @@ return [
             'showScriptName' => false,
             'caseSensitive'  => false,
         ),
-        'errorHandler' => array(
+        'errorHandler' => [
             'errorAction' => 'main/error',
-        ),
+        ],
     ],
-    'params'     => [],
+    'params'            => [],
 ];
