@@ -1,0 +1,7 @@
+{
+  "repositories": [
+  ],
+  "require": {
+    "yiisoft/yii": "1.1.*"
+  }
+}
