@@ -1,3 +1,9 @@
+## Installation
+
+        composer install
+ * Write permissions for protected/runtime
+ * Write permissions for protected/components/fBase/data
+
 # Sky Betting & Gaming Technical Test
 
 ## Introduction
