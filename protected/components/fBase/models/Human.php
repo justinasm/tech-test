@@ -26,4 +26,10 @@ class Human extends FileProcessor
             ]
         );
     }
+
+    public static function removePeople()
+    {
+        $humanModel = new Human();
+        $humanModel->removeAll();
+    }
 }

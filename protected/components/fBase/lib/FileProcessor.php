@@ -214,4 +214,11 @@ class FileProcessor
         fwrite($handle, $row, strlen($row));
         fclose($handle);
     }
+
+    public function removeAll()
+    {
+        $handle = fopen($this->fileName, 'w');
+        ftruncate($handle, 0);
+        fclose($handle);
+    }
 }

@@ -15,7 +15,7 @@
         <th>First name</th>
         <th>Last name</th>
     </tr>
-    <?php if (isset($people)) { ?>
+    <?php if (isset($people) && $people) { ?>
         <?php foreach ($people as $human) {
             $this->renderPartial(
                 '_human_fields',
@@ -72,7 +72,8 @@
             data: data,
             url: '<?php echo Yii::app()->createAbsoluteUrl("main/updateform"); ?>',
             success: function(data) {
-
+                $('#people-form').remove();
+                $('body').append(data);
             }
         });
     }

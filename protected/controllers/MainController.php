@@ -45,13 +45,21 @@ class MainController extends Controller
 
     public function actionUpdateForm()
     {
-        $newPeople = Yii::app()->getRequest()->getPost('new-people', []);
+        Human::removePeople();
+        $people = array_merge(
+            Yii::app()->getRequest()->getPost('people', []),
+            Yii::app()->getRequest()->getPost('new-people', [])
+        );
 
-        foreach ($newPeople as $human) {
-            $humanModel = new Human();
-            $humanModel->attributes = $human;
-            $humanModel->create();
+        foreach ($people as $human) {
+            if (trim($human['firstName']) != '' && trim($human['surname'])) {
+                $humanModel = new Human();
+                $humanModel->attributes = $human;
+                $humanModel->create();
+            }
         }
+
+        $this->actionIndex(true);
     }
 
     public function actionAddMore()
@@ -65,11 +73,12 @@ class MainController extends Controller
         );
     }
 
-    public function actionIndex()
+    public function actionIndex($partial = false)
     {
         $humanModel = new Human();
+        $renderFunction = $partial ? 'renderPartial' : 'render';
 
-        $this->render(
+        $this->$renderFunction(
             'index',
             [
                 'people' => $humanModel->findAll(),
