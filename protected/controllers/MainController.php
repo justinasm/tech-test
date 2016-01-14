@@ -17,7 +17,7 @@ class MainController extends Controller
         return [
             [
                 'allow',  //allow all users to perform actions below
-                'actions' => ['index', 'error'],
+                'actions' => ['index', 'error', 'addmore', 'updateform'],
                 'users'   => ['*'],
             ],
             [
@@ -27,9 +27,33 @@ class MainController extends Controller
         ];
     }
 
+    public function actionUpdateForm()
+    {
+        $newPeople = Yii::app()->getRequest()->getPost('new-people', []);
+
+        foreach ($newPeople as $human) {
+            $humanModel = new Human();
+            $humanModel->attributes = $human;
+            $humanModel->create();
+        }
+    }
+
+    public function actionAddMore()
+    {
+        $this->renderPartial(
+            '_human_fields',
+            [
+                'new'   => true,
+                'key'   => Yii::app()->getRequest()->getPost('key', 0),
+            ]
+        );
+    }
+
     public function actionIndex()
     {
-        $this->render('index');
+        $this->render(
+            'index'
+        );
     }
 
     public function actionError()

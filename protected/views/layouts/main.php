@@ -8,6 +8,7 @@
     <meta name="title" content=""/>
     <meta name="description" content=""/>
     <title><?php echo $this->pageTitle; ?></title>
+    <?php yii::app()->getClientScript()->registerCoreScript('jquery'); ?>
 </head>
 <body>
     <?php echo $content; ?>

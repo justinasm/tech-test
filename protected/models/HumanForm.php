@@ -4,9 +4,9 @@
  * HumanForm class.
  * HumanForm is the data structure for keeping human form data.
  */
-class ContactForm extends CFormModel
+class HumanForm extends CFormModel
 {
-    public $name;
+    public $firstname;
     public $surname;
 
     /**
@@ -15,7 +15,7 @@ class ContactForm extends CFormModel
     public function rules()
     {
         return [
-            ['firstname', 'surname', 'required'],
+            ['firstname, surname', 'required'],
         ];
     }
 

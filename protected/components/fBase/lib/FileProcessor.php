@@ -16,6 +16,37 @@ class FileProcessor
     }
 
     /**
+     * @param $property
+     * @return mixed
+     */
+    public function __get($property) {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+    }
+
+    /**
+     * @param $property
+     * @param $value
+     * @return $this
+     */
+    public function __set($property, $value) {
+        if ($property == 'attributes' && is_array($value)) {
+            foreach ($value as $key => $val) {
+                if (property_exists($this, $key)) {
+                    $this->$key = $val;
+                }
+            }
+        } else {
+            if (property_exists($this, $property)) {
+                $this->$property = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Create an empty file
      * @return bool
      */
@@ -65,7 +96,7 @@ class FileProcessor
     public function countRows()
     {
         $lineCount = 0;
-        $handle = fopen($this->fileName, "r");
+        $handle = fopen($this->fileName, 'r');
 
         while(!feof($handle)) {
             if (strlen(fgets($handle)) > 0) {
@@ -79,6 +110,22 @@ class FileProcessor
     }
 
     /**
+     * @return int
+     */
+    public function getLastId()
+    {
+        $lastRow = $this->findRowByKey($this->countRows());
+
+        if ($lastRow) {
+
+            return $lastRow->id;
+        } else {
+
+            return 0;
+        }
+    }
+
+    /**
      * @param $key int
      * @return bool|mixed
      */
@@ -86,7 +133,7 @@ class FileProcessor
     {
         $row = false;
         $counter = 0;
-        $handle = fopen($this->fileName, "r");
+        $handle = fopen($this->fileName, 'r');
 
         while(!feof($handle)) {
             $row = preg_replace('~[\r\n]+~', '', fgets($handle));
@@ -103,7 +150,7 @@ class FileProcessor
         $row = trim($row) != '' ? $row : false;
         fclose($handle);
 
-        return $row;
+        return json_decode($row);
     }
 
     /**
@@ -118,7 +165,7 @@ class FileProcessor
 
         if (!empty($data)) {
             foreach ($data as $key => $row) {
-                $data[$key] = preg_replace('~[\r\n]+~', '', $row);
+                $data[$key] = json_decode(preg_replace('~[\r\n]+~', '', $row));
             }
 
             $rows = $data;
@@ -145,7 +192,7 @@ class FileProcessor
                 }
             }
 
-            $fp = fopen($this->fileName, "w+");
+            $fp = fopen($this->fileName, 'w+');
             flock($fp, LOCK_EX);
 
             foreach($out as $line) {
@@ -155,5 +202,16 @@ class FileProcessor
             flock($fp, LOCK_UN);
             fclose($fp);
         }
+    }
+
+    /**
+     * @param $row array of data
+     */
+    public function saveRow($row)
+    {
+        $row = json_encode($row) . "\n";
+        $handle = fopen($this->fileName, 'a');
+        fwrite($handle, $row, strlen($row));
+        fclose($handle);
     }
 }
