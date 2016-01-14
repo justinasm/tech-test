@@ -17,17 +17,23 @@ return [
             'class' => 'CFileCache',
         ],
         'urlManager'   => array(
-            'urlFormat'      => 'path',
-            'rules'          => [
+            'urlFormat' => 'path',
+            'rules'     => [
                 '<controller:\w+>/<id:\d+>'              => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>'          => '<controller>/<action>',
             ],
-            'showScriptName' => false,
-            'caseSensitive'  => false,
         ),
         'errorHandler' => [
             'errorAction' => 'main/error',
+        ],
+        'clientScript' => [
+            'packages' => [
+                'jquery'    => [
+                    'baseUrl' => '//ajax.googleapis.com/ajax/libs/jquery/2.2.0/',
+                    'js'      => ['jquery.min.js'],
+                ],
+            ],
         ],
     ],
     'params'            => [],
