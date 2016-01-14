@@ -17,7 +17,7 @@ class MainController extends Controller
         return [
             [
                 'allow',  //allow all users to perform actions below
-                'actions' => ['index', 'error', 'addmore', 'updateform'],
+                'actions' => ['index', 'error', 'addmore', 'updateform', 'removerow'],
                 'users'   => ['*'],
             ],
             [
@@ -25,6 +25,22 @@ class MainController extends Controller
                 'users' => ['*'],
             ],
         ];
+    }
+
+    public function actionRemoveRow()
+    {
+        $id = Yii::app()->getRequest()->getPost('id');
+        $humanModel = new Human();
+        $entries = $humanModel->countRows();
+
+        for ($i = 1; $i <= $entries; $i++) {
+            $row = $humanModel->findRowByKey($i);
+
+            if ($row->id == $id) {
+                $humanModel->deleteRowByKey($i);
+                break;
+            }
+        }
     }
 
     public function actionUpdateForm()
@@ -51,8 +67,13 @@ class MainController extends Controller
 
     public function actionIndex()
     {
+        $humanModel = new Human();
+
         $this->render(
-            'index'
+            'index',
+            [
+                'people' => $humanModel->findAll(),
+            ]
         );
     }
 

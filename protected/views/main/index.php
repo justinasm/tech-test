@@ -15,6 +15,20 @@
         <th>First name</th>
         <th>Last name</th>
     </tr>
+    <?php if (isset($people)) { ?>
+        <?php foreach ($people as $human) {
+            $this->renderPartial(
+                '_human_fields',
+                [
+                    'new'     => false,
+                    'key'     => $human->id,
+                    'name'    => $human->firstName,
+                    'surname' => $human->surname,
+                    'id'      => $human->id,
+                ]
+            );
+         } ?>
+    <?php } ?>
     <?php $this->renderPartial(
         '_human_fields',
         [
@@ -58,8 +72,26 @@
             data: data,
             url: '<?php echo Yii::app()->createAbsoluteUrl("main/updateform"); ?>',
             success: function(data) {
-                console.log(data);
+
             }
         });
+    }
+
+    function removeRow(id, elementName) {
+        if (id > 0) {
+            $.ajax({
+                type: 'POST',
+                dataType: 'html',
+                data: {
+                    id: id
+                },
+                url: '<?php echo Yii::app()->createAbsoluteUrl("main/removerow"); ?>',
+                success: function(data) {
+
+                }
+            });
+        }
+
+        $('#row-'+elementName).remove();
     }
 </script>

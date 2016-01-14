@@ -180,7 +180,7 @@ class FileProcessor
      */
     public function deleteRowByKey($key)
     {
-        $rowToRemove = $this->findRowByKey($key);
+        $rowToRemove = json_encode($this->findRowByKey($key));
 
         if ($rowToRemove) {
             $data = file($this->fileName);
