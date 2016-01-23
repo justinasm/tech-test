@@ -17,7 +17,7 @@ class MainController extends Controller
         return [
             [
                 'allow',  //allow all users to perform actions below
-                'actions' => ['index', 'error', 'addmore', 'updateform', 'removerow'],
+                'actions' => ['index', 'error', 'addmore', 'updateform',],
                 'users'   => ['*'],
             ],
             [
