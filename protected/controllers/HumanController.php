@@ -17,7 +17,7 @@ class HumanController extends Controller
         return [
             [
                 'allow',  //allow all users to perform actions below
-                'actions' => ['view',],
+                'actions' => ['view', 'remove'],
                 'users'   => ['*'],
             ],
             [
@@ -42,5 +42,15 @@ class HumanController extends Controller
             $view,
             ['human' => $human]
         );
+    }
+
+    public function actionRemove()
+    {
+        $humanId = (int) Yii::app()->getRequest()->getPost('id');
+        $humanModel = new Human();
+
+        if ($humanId > 0) {
+            $humanModel->deleteRowById($humanId);
+        }
     }
 }

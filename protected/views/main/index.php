@@ -86,7 +86,7 @@
                 data: {
                     id: id
                 },
-                url: '<?php echo Yii::app()->createAbsoluteUrl("main/removerow"); ?>',
+                url: '<?php echo Yii::app()->createAbsoluteUrl("human/remove"); ?>',
                 success: function(data) {
 
                 }

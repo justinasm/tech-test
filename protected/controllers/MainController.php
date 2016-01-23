@@ -27,16 +27,6 @@ class MainController extends Controller
         ];
     }
 
-    public function actionRemoveRow()
-    {
-        $humanId = (int) Yii::app()->getRequest()->getPost('id');
-        $humanModel = new Human();
-
-        if ($humanId > 0) {
-            $humanModel->deleteRowById($humanId);
-        }
-    }
-
     public function actionUpdateForm()
     {
         Human::removePeople();
