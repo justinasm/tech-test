@@ -3,6 +3,7 @@
         composer install
  * Write permissions for protected/runtime
  * Write permissions for protected/components/fBase/data
+ * mod_rewrite has to be enabled on the apache server
 
 # Sky Betting & Gaming Technical Test
 
