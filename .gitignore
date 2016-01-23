@@ -3,3 +3,5 @@ assets/*
 vendor/*
 protected/runtime/*
 !protected/runtime/.htaccess
+protected/components/fBase/data/*
+!protected/components/fBase/data/.htaccess
