@@ -8,19 +8,27 @@ class Human extends FileProcessor
     public $firstName;
     public $surname;
 
-    public function __construct()
+    public function __construct($humanId = null)
     {
         //set the model name and create an empty file if not exists
         $this->modelName = serverConfig('HUMAN_MODEL');
         parent::__construct(serverConfig('DATA_FILE_LOCATION') . serverConfig('HUMAN_MODEL'));
+
+        if (!is_null($humanId)) {
+            $humanData = $this->findRowById($humanId);
+
+            if ($humanData) {
+                $this->attributes = $humanData;
+            }
+        }
     }
 
-    public function create()
+    public function create($id = null)
     {
         $lastId = $this->getLastId();
         $this->saveRow(
             [
-                'id'        => ++$lastId,
+                'id'        => is_null($id) ? ++$lastId : $id,
                 'firstName' => $this->firstName,
                 'surname'   => $this->surname,
             ]

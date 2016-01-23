@@ -29,17 +29,11 @@ class MainController extends Controller
 
     public function actionRemoveRow()
     {
-        $id = Yii::app()->getRequest()->getPost('id');
+        $humanId = (int) Yii::app()->getRequest()->getPost('id');
         $humanModel = new Human();
-        $entries = $humanModel->countRows();
 
-        for ($i = 1; $i <= $entries; $i++) {
-            $row = $humanModel->findRowByKey($i);
-
-            if ($row->id == $id) {
-                $humanModel->deleteRowByKey($i);
-                break;
-            }
+        if ($humanId > 0) {
+            $humanModel->deleteRowById($humanId);
         }
     }
 
@@ -55,7 +49,9 @@ class MainController extends Controller
             if (trim($human['firstName']) != '' && trim($human['surname'])) {
                 $humanModel = new Human();
                 $humanModel->attributes = $human;
-                $humanModel->create();
+                $humanModel->create(
+                    !is_null($humanModel->id) ? $humanModel->id : null
+                );
             }
         }
 

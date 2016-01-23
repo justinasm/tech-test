@@ -31,8 +31,8 @@ class FileProcessor
      * @return $this
      */
     public function __set($property, $value) {
-        if ($property == 'attributes' && is_array($value)) {
-            foreach ($value as $key => $val) {
+        if ($property == 'attributes' && (is_array($value) || is_object($value))) {
+            foreach ((array) $value as $key => $val) {
                 if (property_exists($this, $key)) {
                     $this->$key = $val;
                 }
@@ -154,6 +154,28 @@ class FileProcessor
     }
 
     /**
+     * @param $id int
+     * @return bool|mixed
+     */
+    public function findRowById($id)
+    {
+        $row = false;
+        $handle = fopen($this->fileName, 'r');
+
+        while(!feof($handle)) {
+            $row = json_decode(preg_replace('~[\r\n]+~', '', fgets($handle)));
+
+            if (isset($row->id) && $row->id == $id) {
+                break;
+            }
+        }
+
+        fclose($handle);
+
+        return $row;
+    }
+
+    /**
      * Select all rows in the file
      * @return array|bool
      */
@@ -174,13 +196,9 @@ class FileProcessor
         return $rows;
     }
 
-    /**
-     * Delete row by key
-     * @param $key int
-     */
-    public function deleteRowByKey($key)
+    public function deleteRowById($rowId)
     {
-        $rowToRemove = json_encode($this->findRowByKey($key));
+        $rowToRemove = json_encode($this->findRowById($rowId));
 
         if ($rowToRemove) {
             $data = file($this->fileName);
