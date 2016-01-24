@@ -10,6 +10,12 @@
         ],
     ]
 ); ?>
+<div id="errors">
+    <?php foreach ($errors as $error) {
+        echo '<p>' . $error . '</p>';
+    }
+    ?>
+</div>
 <table>
     <tr>
         <th>First name</th>
@@ -65,17 +71,45 @@
     }
 
     function save() {
-        var data = $('#people-form').serialize();
-        $.ajax({
-            type: 'POST',
-            dataType: 'html',
-            data: data,
-            url: '<?php echo Yii::app()->createAbsoluteUrl("main/updateform"); ?>',
-            success: function(data) {
-                $('#people-form').remove();
-                $('body').append(data);
+        if (validatePeopleForm()) {
+            var data = $('#people-form').serialize();
+            $.ajax({
+                type: 'POST',
+                dataType: 'html',
+                data: data,
+                url: '<?php echo Yii::app()->createAbsoluteUrl("main/updateform"); ?>',
+                success: function(data) {
+                    $('body').html('');
+                    $('body').append(data);
+                }
+            });
+        }
+    }
+
+    function validatePeopleForm()
+    {
+        $('#errors').html('');
+        var errors = 0;
+
+        $('#people-form .human-row').each(function() {
+            if (!$(this).hasClass('new-human')) {
+                $('input[type=text]').each(function() {
+                    if (!$(this).val().match(/^[a-zA-Z\s]+$/) && $(this).val() != '') {
+
+                        errors++;
+                    }
+                });
             }
         });
+
+        if (errors > 0) {
+            $('#errors').append('<p>Names must contain only letters.</p>');
+
+            return false;
+        } else {
+
+            return true;
+        }
     }
 
     function removeRow(id, elementName) {

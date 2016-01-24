@@ -29,23 +29,32 @@ class MainController extends Controller
 
     public function actionUpdateForm()
     {
-        Human::removePeople();
-        $people = array_merge(
-            Yii::app()->getRequest()->getPost('people', []),
-            Yii::app()->getRequest()->getPost('new-people', [])
+        $existingPeople = Yii::app()->getRequest()->getPost('people', []);
+        $newPeople = Yii::app()->getRequest()->getPost('new-people', []);
+        $errors = array_merge(
+            Human::validateHumanData($existingPeople),
+            Human::validateHumanData($newPeople, true)
         );
 
-        foreach ($people as $human) {
-            if (trim($human['firstName']) != '' && trim($human['surname'])) {
-                $humanModel = new Human();
-                $humanModel->attributes = $human;
-                $humanModel->create(
-                    !is_null($humanModel->id) ? $humanModel->id : null
-                );
+        if (empty($errors)) {
+            Human::removePeople();
+            $people = array_merge(
+                $newPeople,
+                $existingPeople
+            );
+
+            foreach ($people as $human) {
+                if (trim($human['firstName']) != '' && trim($human['surname']) != '') {
+                    $humanModel = new Human();
+                    $humanModel->attributes = $human;
+                    $humanModel->create(
+                        !is_null($humanModel->id) ? $humanModel->id : null
+                    );
+                }
             }
         }
 
-        $this->actionIndex(true);
+        $this->actionIndex(true, $errors);
     }
 
     public function actionAddMore()
@@ -59,7 +68,7 @@ class MainController extends Controller
         );
     }
 
-    public function actionIndex($partial = false)
+    public function actionIndex($partial = false, $errors = [])
     {
         $humanModel = new Human();
         $renderFunction = $partial ? 'renderPartial' : 'render';
@@ -68,6 +77,7 @@ class MainController extends Controller
             'index',
             [
                 'people' => $humanModel->findAll(),
+                'errors' => $errors,
             ]
         );
     }

@@ -26,11 +26,14 @@ class Human extends FileProcessor
     public function create($id = null)
     {
         $lastId = $this->getLastId();
+
+        $id = htmlspecialchars(is_null($id) ? ++$lastId : $id);
+
         $this->saveRow(
             [
                 'id'        => is_null($id) ? ++$lastId : $id,
-                'firstName' => $this->firstName,
-                'surname'   => $this->surname,
+                'firstName' => htmlspecialchars($this->firstName),
+                'surname'   => htmlspecialchars($this->surname),
             ]
         );
     }
@@ -39,5 +42,31 @@ class Human extends FileProcessor
     {
         $humanModel = new Human();
         $humanModel->removeAll();
+    }
+
+    public static function validateHumanData($data, $new = false)
+    {
+        $errors = [];
+
+        foreach ($data as $human) {
+            if (!$new
+                && (!preg_match('/^[a-zA-Z\s]+$/', $human['firstName']) || !preg_match('/^[a-zA-Z\s]+$/', $human['surname']))
+            ) {
+                $errors[] = 'Names and Surname must contain only letters and cannot be empty.';
+            }
+
+            if ($new) {
+                if ((!preg_match('/^[a-zA-Z\s]+$/', $human['firstName']) && $human['surname'] != '')
+                    || trim($human['firstName']) != '' && !preg_match('/^[a-zA-Z\s]+$/', $human['surname'])) {
+                    $errors[] = 'New human must have Name and Surname with only letter';
+                }
+            }
+
+            if (!empty($errors)) {
+                break;
+            }
+        }
+
+        return $errors;
     }
 }

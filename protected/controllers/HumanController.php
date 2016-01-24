@@ -29,7 +29,7 @@ class HumanController extends Controller
 
     public function actionView()
     {
-        $humanId = (int) Yii::app()->getRequest()->getQuery('id');
+        $humanId = (int) urlencode(Yii::app()->getRequest()->getQuery('id'));
         $human = new Human($humanId);
 
         if (!is_null($human->id)) {
